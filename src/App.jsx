@@ -1,35 +1,77 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Link,
+  Navigate,
+} from "react-router-dom";
+import Login from "./components/Login";
+import Home from "./pages/Home"; // 수정된 경로
+import WritePost from "./pages/WritePost"; // 수정된 경로
+import Signup from "./pages/Signup"; // 회원가입 컴포넌트 추가
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // 로컬 스토리지에서 사용자 정보를 가져와서 setUser로 설정
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  // 로그인 상태를 체크하는 함수
+  const isLoggedIn = () => {
+    return !!user; // user가 존재하면 true, 없으면 false 반환
+  };
 
   return (
-    <>
+    <Router>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <nav>
+          {/* 홈 화면과 게시물 작성 페이지 링크 */}
+          <Link to="/">Home</Link>
+          {isLoggedIn() && <Link to="/write">Write Post</Link>}
+          {/* 로그인/로그아웃 링크 */}
+          {!isLoggedIn() && <Link to="/login">Login</Link>}
+          {isLoggedIn() && <Link to="/logout">Logout</Link>}
+        </nav>
+        <Routes>
+          {/* 로그인이 되어 있지 않을 때 로그인 페이지로 이동 */}
+          {!isLoggedIn() && (
+            <Route path="/" element={<Navigate to="/login" />} />
+          )}
+          {/* 로그인 후에는 홈 화면으로 이동 */}
+          {isLoggedIn() && (
+            <>
+              <Route path="/" element={<Home />} />
+              <Route path="/write" element={<WritePost user={user} />} />
+              {/* 로그아웃 처리 */}
+              <Route path="/logout" element={<Logout setUser={setUser} />} />
+            </>
+          )}
+          {/* 로그인 페이지 */}
+          <Route path="/login" element={<Login setUser={setUser} />} />
+          {/* 회원가입 페이지 */}
+          <Route path="/signup" element={<Signup />} />
+        </Routes>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </Router>
+  );
 }
 
-export default App
+// 로그아웃 컴포넌트
+function Logout({ setUser }) {
+  useEffect(() => {
+    // 로그아웃 시 로컬 스토리지에서 사용자 정보 삭제
+    localStorage.removeItem("user");
+    setUser(null); // setUser를 사용하여 user 상태를 null로 설정하고 로그아웃 처리
+  }, []);
+
+  return <Navigate to="/login" />;
+}
+
+export default App;
