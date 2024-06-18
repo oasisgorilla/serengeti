@@ -34,25 +34,16 @@ function App() {
         <nav>
           {/* 홈 화면과 게시물 작성 페이지 링크 */}
           <Link to="/">Home</Link>
-          {isLoggedIn() && <Link to="/write">Write Post</Link>}
+          <Link to="/write">Write Post</Link>
           {/* 로그인/로그아웃 링크 */}
           {!isLoggedIn() && <Link to="/login">Login</Link>}
           {isLoggedIn() && <Link to="/logout">Logout</Link>}
         </nav>
         <Routes>
-          {/* 로그인이 되어 있지 않을 때 로그인 페이지로 이동 */}
-          {!isLoggedIn() && (
-            <Route path="/" element={<Navigate to="/login" />} />
-          )}
-          {/* 로그인 후에는 홈 화면으로 이동 */}
-          {isLoggedIn() && (
-            <>
-              <Route path="/" element={<Home />} />
-              <Route path="/write" element={<WritePost user={user} />} />
-              {/* 로그아웃 처리 */}
-              <Route path="/logout" element={<Logout setUser={setUser} />} />
-            </>
-          )}
+            <Route path="/" element={<Home />} />
+            <Route path="/write" element={<WritePost user={user} />} />
+            {/* 로그아웃 처리 */}
+            <Route path="/logout" element={<Logout setUser={setUser} />} />
           {/* 로그인 페이지 */}
           <Route path="/login" element={<Login setUser={setUser} />} />
           {/* 회원가입 페이지 */}
@@ -69,6 +60,7 @@ function Logout({ setUser }) {
     // 로그아웃 시 로컬 스토리지에서 사용자 정보 삭제
     localStorage.removeItem("user");
     setUser(null); // setUser를 사용하여 user 상태를 null로 설정하고 로그아웃 처리
+    console.log("log out");
   }, []);
 
   return <Navigate to="/login" />;

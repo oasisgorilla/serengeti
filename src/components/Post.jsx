@@ -1,4 +1,5 @@
 import React from "react";
+import "./Post.css";
 import api from "../api";
 
 function Post({ post, onDelete }) {
@@ -15,9 +16,11 @@ function Post({ post, onDelete }) {
 
   return (
     <div>
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
-      <button onClick={handleDelete}>Delete</button>
+      <div className="card">
+        <h2 className="card-title">{post.title}</h2>
+        <p className="card-content">{post.content}</p>
+        <button onClick={handleDelete}>Delete</button>
+      </div>
     </div>
   );
 }
