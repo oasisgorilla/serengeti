@@ -41,7 +41,7 @@ function Home() {
 
   return (
     <div>
-      <h1>Board</h1>
+      <h2>Board</h2>
       <div className="card-container">
         {posts.length === 0 ? (
           <div>No posts available.</div>

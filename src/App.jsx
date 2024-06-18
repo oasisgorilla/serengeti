@@ -31,19 +31,23 @@ function App() {
   return (
     <Router>
       <div>
-        <nav>
-          {/* 홈 화면과 게시물 작성 페이지 링크 */}
-          <Link to="/">Home</Link>
-          <Link to="/write">Write Post</Link>
-          {/* 로그인/로그아웃 링크 */}
-          {!isLoggedIn() && <Link to="/login">Login</Link>}
-          {isLoggedIn() && <Link to="/logout">Logout</Link>}
-        </nav>
+        <header>
+          <h1>Serengeti</h1>
+          <nav>
+            {/* 홈 화면과 게시물 작성 페이지 링크 */}
+            <Link to="/">Home</Link>
+            <Link to="/write">Write Post</Link>
+          </nav>
+          <div className="login-container">
+            {!isLoggedIn() && <Link to="/login">Login</Link>}
+            {isLoggedIn() && <Link to="/logout">Logout</Link>}
+          </div>
+        </header>
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/write" element={<WritePost user={user} />} />
-            {/* 로그아웃 처리 */}
-            <Route path="/logout" element={<Logout setUser={setUser} />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/write" element={<WritePost user={user} />} />
+          {/* 로그아웃 처리 */}
+          <Route path="/logout" element={<Logout setUser={setUser} />} />
           {/* 로그인 페이지 */}
           <Route path="/login" element={<Login setUser={setUser} />} />
           {/* 회원가입 페이지 */}
