@@ -41,7 +41,7 @@ function Home({ currentUser }) {
   };
 
   const openPostDetail = (post) => {
-    console.log("openPostDetail 들어옴!");
+    // console.log("openPostDetail 들어옴!");
     setSelectedPost(post);
   };
 

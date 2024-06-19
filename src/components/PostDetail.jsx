@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "./PostDetail.css";
 
@@ -7,6 +8,7 @@ function PostDetail({ post, onClose, currentUser }) {
   const [newComment, setNewComment] = useState("");
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -19,6 +21,7 @@ function PostDetail({ post, onClose, currentUser }) {
     };
 
     const checkLiked = async () => {
+      if (!currentUser) return; // 로그인하지 않은 경우 체크하지 않음
       try {
         const response = await api.get(`/users/${currentUser.id}/liked-posts`);
         setLiked(response.data.some((likedPost) => likedPost.id === post.id));
@@ -39,9 +42,14 @@ function PostDetail({ post, onClose, currentUser }) {
     fetchComments();
     fetchLikeCount();
     checkLiked();
-  }, [post.id, currentUser.id]);
+  }, [post.id, currentUser]);
 
   const handleLike = async () => {
+    if (!currentUser) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
     try {
       if (liked) {
         await api.delete(`/posts/${post.id}/unlike`);
@@ -58,6 +66,11 @@ function PostDetail({ post, onClose, currentUser }) {
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
+    if (!currentUser) {
+      alert("로그인이 필요합니다.");
+      navigate("/login");
+      return;
+    }
     try {
       const response = await api.post(`/posts/${post.id}/comments`, {
         content: newComment,
