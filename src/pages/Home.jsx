@@ -3,11 +3,9 @@ import api from "../api";
 import Post from "../components/Post";
 import "./Home.css";
 
-function Home() {
+function Home({ currentUser }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -23,17 +21,19 @@ function Home() {
     fetchPosts();
   }, []);
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await api.post("/posts", { title, content });
-  //     setPosts([...posts, response.data]);
-  //     setTitle("");
-  //     setContent("");
-  //   } catch (error) {
-  //     console.error("Error creating post:", error);
-  //   }
-  // };
+  const handleDelete = (postId) => {
+    setPosts(posts.filter((post) => post.id !== postId));
+  };
+
+  const handleUpdate = (postId, newTitle, newContent) => {
+    setPosts(
+      posts.map((post) =>
+        post.id === postId
+          ? { ...post, title: newTitle, content: newContent }
+          : post
+      )
+    );
+  };
 
   if (loading) {
     return <div>Loading...</div>;
@@ -46,9 +46,15 @@ function Home() {
         {posts.length === 0 ? (
           <div>No posts available.</div>
         ) : (
-          posts.map((post) => {
-            console.log(post); // post{id: , title: , content: }
-            return <Post key={post.id} post={post} />;})
+          posts.map((post) => (
+            <Post
+              key={post.id}
+              post={post}
+              onDelete={handleDelete}
+              onUpdate={handleUpdate}
+              currentUser={currentUser}
+            />
+          ))
         )}
       </div>
     </div>

@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom"; // useNavigate 훅을 가져옴
 import api from "../api";
 import "./WritePost.css";
 
-function WritePost({user}) {
+function WritePost({ user }) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const navigate = useNavigate(); // useNavigate 훅을 초기화
 
@@ -18,8 +18,12 @@ function WritePost({user}) {
     }
     e.preventDefault();
     try {
-      const response = await api.post("/posts", { title, content });
-      setPosts([...posts, response.data]);
+      const response = await api.post("/posts", {
+        title,
+        content,
+        authorId: user.id,
+      });
+      // setPosts([...posts, response.data]);
       setTitle("");
       setContent("");
       alert("게시 성공!"); // 성공 알림 메시지 표시

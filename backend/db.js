@@ -8,7 +8,7 @@ db.serialize(() => {
     "CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT, password TEXT)"
   );
   db.run(
-    "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT)"
+    "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, authorId INTEGER, FOREIGN KEY(authorId) REFERENCES users(id))"
   );
   db.run(
     "CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY AUTOINCREMENT, postId INTEGER, content TEXT, FOREIGN KEY(postId) REFERENCES posts(id))"

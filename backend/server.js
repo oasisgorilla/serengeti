@@ -15,7 +15,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(
   session({
-    store: new SQLiteStore({ db: 'mydatabase.sqlite' }),
+    store: new SQLiteStore({ db: "mydatabase.sqlite" }),
     secret: "your-secret-key",
     resave: false,
     saveUninitialized: false,
@@ -57,7 +57,7 @@ app.post("/api/posts", (req, res) => {
   }
 
   db.run(
-    "INSERT INTO posts (title, content, userId) VALUES (?, ?, ?)",
+    "INSERT INTO posts (title, content, authorId) VALUES (?, ?, ?)",
     [title, content, user.id], // user.id를 통해 사용자 식별자 저장
     function (err) {
       if (err) {
@@ -87,15 +87,19 @@ app.delete("/api/posts/:id", (req, res) => {
     return res.status(401).json({ error: "Unauthorized" });
   }
 
-  db.run("DELETE FROM posts WHERE id = ? AND userId = ?", [id, user.id], function (err) {
-    if (err) {
-      return res.status(500).json({ error: err.message });
+  db.run(
+    "DELETE FROM posts WHERE id = ? AND authorId = ?",
+    [id, user.id],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      if (this.changes === 0) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      res.status(204).send();
     }
-    if (this.changes === 0) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
-    res.status(204).send();
-  });
+  );
 });
 
 // 게시물 수정 엔드포인트
@@ -109,7 +113,7 @@ app.put("/api/posts/:id", (req, res) => {
   }
 
   db.run(
-    "UPDATE posts SET title = ?, content = ? WHERE id = ? AND userId = ?",
+    "UPDATE posts SET title = ?, content = ? WHERE id = ? AND authorId = ?",
     [title, content, id, user.id],
     function (err) {
       if (err) {

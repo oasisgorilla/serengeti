@@ -21,7 +21,10 @@ function App() {
     // 로컬 스토리지에서 사용자 정보를 가져와서 setUser로 설정
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
+      console.log("Stored user found:", storedUser); // 확인용 로그 추가
       setUser(JSON.parse(storedUser));
+    } else {
+      console.log("No stored user found"); // 확인용 로그 추가
     }
   }, []);
 
@@ -48,7 +51,7 @@ function App() {
           </div>
         </nav>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home currentUser={user} />} />
           <Route path="/write" element={<WritePost user={user} />} />
           <Route path="/mypage" element={<Mypage user={user} />} />
           <Route path="/logout" element={<Logout setUser={setUser} />} />
