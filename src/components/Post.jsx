@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Post.css";
 import api from "../api";
 
-function Post({ post, onDelete, currentUser, onUpdate }) {
+function Post({ post, onDelete, currentUser, onUpdate, onClick }) {
   const [isEditing, setIsEditing] = useState(false);
   const [title, setTitle] = useState(post.title);
   const [content, setContent] = useState(post.content);
@@ -50,7 +50,9 @@ function Post({ post, onDelete, currentUser, onUpdate }) {
 
   return (
     <div>
-      <div className="card">
+      <div className="card" onClick={() => onClick(post)}>
+        {" "}
+        {/* 클릭 이벤트 핸들러 추가 */}
         {isEditing ? (
           <>
             <input

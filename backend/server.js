@@ -127,31 +127,41 @@ app.put("/api/posts/:id", (req, res) => {
   );
 });
 
-// 댓글 작성 엔드포인트
+// 댓글 작성 엔드포인트 수정
 app.post("/api/posts/:id/comments", (req, res) => {
   const { id } = req.params;
   const { content } = req.body;
+  const { user } = req.session;
+
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   db.run(
-    "INSERT INTO comments (postId, content) VALUES (?, ?)",
-    [id, content],
+    "INSERT INTO comments (postId, content, authorId) VALUES (?, ?, ?)",
+    [id, content, user.id],
     function (err) {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ id: this.lastID, postId: id, content });
+      res.json({ id: this.lastID, postId: id, content, authorId: user.id });
     }
   );
 });
 
-// 댓글 목록 가져오기 엔드포인트
+// 댓글 목록 가져오기 엔드포인트 수정
 app.get("/api/posts/:id/comments", (req, res) => {
   const { id } = req.params;
-  db.all("SELECT * FROM comments WHERE postId = ?", id, (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
+  db.all(
+    "SELECT comments.*, users.username AS author FROM comments JOIN users ON comments.authorId = users.id WHERE postId = ?",
+    [id],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(rows);
     }
-    res.json(rows);
-  });
+  );
 });
 
 // 회원가입 엔드포인트 추가
@@ -196,6 +206,78 @@ app.post("/api/change-password", (req, res) => {
         return res.status(500).json({ error: err.message });
       }
       res.json({ message: "Password updated successfully" });
+    }
+  );
+});
+
+// 좋아요 수 가져오기 엔드포인트
+app.get("/api/posts/:id/likes", (req, res) => {
+  const { id } = req.params;
+  db.get(
+    "SELECT COUNT(*) as likeCount FROM likes WHERE postId = ?",
+    [id],
+    (err, row) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(row);
+    }
+  );
+});
+
+// 좋아요 추가 엔드포인트
+app.post("/api/posts/:id/like", (req, res) => {
+  const { id } = req.params;
+  const { user } = req.session;
+
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  db.run(
+    "INSERT INTO likes (postId, userId) VALUES (?, ?)",
+    [id, user.id],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: "Post liked successfully" });
+    }
+  );
+});
+
+// 좋아요 취소 엔드포인트
+app.delete("/api/posts/:id/unlike", (req, res) => {
+  const { id } = req.params;
+  const { user } = req.session;
+
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  db.run(
+    "DELETE FROM likes WHERE postId = ? AND userId = ?",
+    [id, user.id],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: "Post unliked successfully" });
+    }
+  );
+});
+
+// 사용자가 좋아요를 누른 게시물 목록 엔드포인트
+app.get("/api/users/:id/liked-posts", (req, res) => {
+  const { id } = req.params;
+  db.all(
+    "SELECT posts.* FROM posts JOIN likes ON posts.id = likes.postId WHERE likes.userId = ?",
+    [id],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json(rows);
     }
   );
 });

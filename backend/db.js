@@ -11,7 +11,11 @@ db.serialize(() => {
     "CREATE TABLE IF NOT EXISTS posts (id INTEGER PRIMARY KEY AUTOINCREMENT, title TEXT, content TEXT, authorId INTEGER, FOREIGN KEY(authorId) REFERENCES users(id))"
   );
   db.run(
-    "CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY AUTOINCREMENT, postId INTEGER, content TEXT, FOREIGN KEY(postId) REFERENCES posts(id))"
+    "CREATE TABLE IF NOT EXISTS comments (id INTEGER PRIMARY KEY AUTOINCREMENT, postId INTEGER, content TEXT, authorId INTEGER, FOREIGN KEY(postId) REFERENCES posts(id), FOREIGN KEY(authorId) REFERENCES users(id))"
+  );
+  // 좋아요 기능
+  db.run(
+    "CREATE TABLE IF NOT EXISTS likes (id INTEGER PRIMARY KEY AUTOINCREMENT,postId INTEGER, userId INTEGER, FOREIGN KEY(postId) REFERENCES posts(id), FOREIGN KEY(userId) REFERENCES users(id))"
   );
 });
 
