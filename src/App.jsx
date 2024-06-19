@@ -7,10 +7,12 @@ import {
   Navigate,
 } from "react-router-dom";
 import Login from "./components/Login";
-import Home from "./pages/Home"; // 수정된 경로
-import WritePost from "./pages/WritePost"; // 수정된 경로
-import Signup from "./pages/Signup"; // 회원가입 컴포넌트 추가
+import Home from "./pages/Home"; // 홈
+import WritePost from "./pages/WritePost"; // 게시글 작성
+import Signup from "./pages/Signup"; // 회원가입
+import Mypage from "./pages/Mypage"; // 마이페이지
 import "./App.css";
+import bannerImage from "./assets/serengeti.jpg";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -31,26 +33,26 @@ function App() {
   return (
     <Router>
       <div>
-        <header>
-          <h1>Serengeti</h1>
-          <nav>
-            {/* 홈 화면과 게시물 작성 페이지 링크 */}
-            <Link to="/">Home</Link>
-            <Link to="/write">Write Post</Link>
-          </nav>
+        <header className="banner">
+          <div className="overlay">
+            <h1>Serengeti</h1>
+          </div>
+        </header>
+        <nav className="navbar">
+          <Link to="/">Home</Link>
+          <Link to="/write">Write Post</Link>
+          {isLoggedIn() && <Link to="/mypage">MyPage</Link>}
           <div className="login-container">
             {!isLoggedIn() && <Link to="/login">Login</Link>}
             {isLoggedIn() && <Link to="/logout">Logout</Link>}
           </div>
-        </header>
+        </nav>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/write" element={<WritePost user={user} />} />
-          {/* 로그아웃 처리 */}
+          <Route path="/mypage" element={<Mypage user={user} />} />
           <Route path="/logout" element={<Logout setUser={setUser} />} />
-          {/* 로그인 페이지 */}
           <Route path="/login" element={<Login setUser={setUser} />} />
-          {/* 회원가입 페이지 */}
           <Route path="/signup" element={<Signup />} />
         </Routes>
       </div>
@@ -58,12 +60,10 @@ function App() {
   );
 }
 
-// 로그아웃 컴포넌트
 function Logout({ setUser }) {
   useEffect(() => {
-    // 로그아웃 시 로컬 스토리지에서 사용자 정보 삭제
     localStorage.removeItem("user");
-    setUser(null); // setUser를 사용하여 user 상태를 null로 설정하고 로그아웃 처리
+    setUser(null);
     console.log("log out");
   }, []);
 

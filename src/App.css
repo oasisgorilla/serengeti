@@ -5,48 +5,50 @@ body {
 }
 
 header {
+  position: relative;
+  width: 100%;
+  height: 200px; /* 배너의 높이를 설정 */
+  background-image: url('./assets/serengeti.jpg'); /* 이미지 경로를 설정 */
+  background-size: cover;
+  background-position: center;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 검정색 반투명 레이어 */
   display: flex;
-  height: 80px;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #333;
-  padding: 10px 20px;
-  color: white;
-}
-
-nav {
-  display: flex;
-  gap: 20px;
-}
-
-nav a {
-  color: white;
-  text-decoration: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
-nav a:hover {
-  background-color: #555;
-}
-
-.login-container {
-  display: flex;
+  justify-content: center;
   align-items: center;
 }
 
-.login-container a{
+.overlay h1 {
   color: white;
-  text-decoration: none;
-  margin-left: 20px;
-  padding: 5px 10px;
-  border-radius: 5px;
-}
-
-.login-container a:hover {
-  background-color: #555;
-}
-
-h1 {
   margin: 0;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  background-color: #333;
+  padding: 10px;
+}
+
+.navbar a {
+  color: white;
+  margin: 0 15px;
+  text-decoration: none;
+}
+
+.navbar .login-container {
+  margin-left: auto;
+}
+
+.login-container a {
+  color: white;
+  text-decoration: none;
+  margin-left: 15px;
 }

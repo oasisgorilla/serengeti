@@ -6,7 +6,12 @@ const SQLiteStore = require("connect-sqlite3")(session);
 const db = require("./db");
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173", // 클라이언트 URL
+    credentials: true,
+  })
+);
 app.use(bodyParser.json());
 app.use(
   session({
@@ -24,9 +29,17 @@ app.post("/api/login", (req, res) => {
     "SELECT * FROM users WHERE username = ? AND password = ?",
     [username, password],
     (err, user) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
       if (user) {
         req.session.user = user;
-        res.json({ user });
+        req.session.save((err) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+          res.json({ user });
+        });
       } else {
         res.status(401).json({ error: "Invalid credentials" });
       }
@@ -119,6 +132,28 @@ app.post("/api/signup", (req, res) => {
       }
     );
   });
+});
+
+// 비밀번호 변경
+app.post("/api/change-password", (req, res) => {
+  const { username, newPassword } = req.body;
+  console.log("hi", req.session.user);
+  // 예외 처리: 사용자가 로그인 되어 있는지 확인
+  if (!req.session.user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  // 비밀번호 변경
+  db.run(
+    "UPDATE users SET password = ? WHERE username = ?",
+    [newPassword, username],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: "Password updated successfully" });
+    }
+  );
 });
 
 app.listen(3000, () => {
