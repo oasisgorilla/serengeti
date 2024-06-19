@@ -15,7 +15,7 @@ app.use(
 app.use(bodyParser.json());
 app.use(
   session({
-    store: new SQLiteStore(),
+    store: new SQLiteStore({ db: 'mydatabase.sqlite' }),
     secret: "your-secret-key",
     resave: false,
     saveUninitialized: false,
@@ -50,14 +50,20 @@ app.post("/api/login", (req, res) => {
 // 게시물 생성 엔드포인트
 app.post("/api/posts", (req, res) => {
   const { title, content } = req.body;
+  const { user } = req.session; // 세션에서 사용자 정보를 가져옴
+
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
   db.run(
-    "INSERT INTO posts (title, content) VALUES (?, ?)",
-    [title, content],
+    "INSERT INTO posts (title, content, userId) VALUES (?, ?, ?)",
+    [title, content, user.id], // user.id를 통해 사용자 식별자 저장
     function (err) {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ id: this.lastID, title, content });
+      res.json({ id: this.lastID, title, content, userId: user.id });
     }
   );
 });
@@ -75,12 +81,46 @@ app.get("/api/posts", (req, res) => {
 // 게시물 삭제 엔드포인트
 app.delete("/api/posts/:id", (req, res) => {
   const { id } = req.params;
-  db.run("DELETE FROM posts WHERE id = ?", id, function (err) {
+  const { user } = req.session; // 세션에서 사용자 정보를 가져옴
+
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  db.run("DELETE FROM posts WHERE id = ? AND userId = ?", [id, user.id], function (err) {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
+    if (this.changes === 0) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
     res.status(204).send();
   });
+});
+
+// 게시물 수정 엔드포인트
+app.put("/api/posts/:id", (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  const { user } = req.session; // 세션에서 사용자 정보를 가져옴
+
+  if (!user) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  db.run(
+    "UPDATE posts SET title = ?, content = ? WHERE id = ? AND userId = ?",
+    [title, content, id, user.id],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      if (this.changes === 0) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      res.json({ id, title, content, userId: user.id });
+    }
+  );
 });
 
 // 댓글 작성 엔드포인트

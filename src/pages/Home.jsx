@@ -13,7 +13,7 @@ function Home() {
     const fetchPosts = async () => {
       try {
         const response = await api.get("/posts");
-        setPosts(response.data);
+        setPosts(response.data); // posts 안에 게시물들 넣어줌
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {
@@ -46,7 +46,9 @@ function Home() {
         {posts.length === 0 ? (
           <div>No posts available.</div>
         ) : (
-          posts.map((post) => <Post key={post.id} post={post} />)
+          posts.map((post) => {
+            console.log(post); // post{id: , title: , content: }
+            return <Post key={post.id} post={post} />;})
         )}
       </div>
     </div>

@@ -2,9 +2,14 @@ import React from "react";
 import "./Post.css";
 import api from "../api";
 
-function Post({ post, onDelete }) {
+function Post({ post, onDelete, currentUser }) {
   const handleDelete = async () => {
     try {
+      if (post.authorId !== currentUser.id) {
+        console.error("Permission denied: You are not the author of this post");
+        return;
+      }
+
       await api.delete(`/posts/${post.id}`);
       if (onDelete) {
         onDelete(post.id);
@@ -19,7 +24,9 @@ function Post({ post, onDelete }) {
       <div className="card">
         <h2 className="card-title">{post.title}</h2>
         <p className="card-content">{post.content}</p>
-        <button onClick={handleDelete}>Delete</button>
+        {currentUser && post.authorId === currentUser.id && (
+          <button onClick={handleDelete}>Delete</button>
+        )}
       </div>
     </div>
   );
