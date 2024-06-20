@@ -3,10 +3,10 @@
 /* 각 카드 스타일 */
 .card {
   flex: 1 1 300px; /* 초기 크기 지정 및 화면 크기에 따른 조정 */
-  border: 1px solid #ccc;
+  border: 1px solid #DEB887;
   border-radius: 8px;
   padding: 16px;
-  background-color: #fff;
+  background-color: #FFF8DC;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease; /* 호버 효과를 위한 transition */
 }
@@ -18,10 +18,10 @@
 .card-title {
   font-size: 1.5rem;
   margin-bottom: 8px;
-  color: #666;
+  color: #2E8B57;
 }
 
 .card-content {
   font-size: 1rem;
-  color: #666;
+  color: #2E8B57;
 }

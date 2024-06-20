@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
 import Post from "../components/Post";
+import "./Mypage.css";
 import ChangePasswordForm from "../components/ChangePasswordForm";
 
 const Mypage = ({ user }) => {

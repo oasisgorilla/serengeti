@@ -1,0 +1,57 @@
+/* Mypage.css */
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f3f0e8; /* 세렝게티 초원을 연상시키는 배경색 */
+    color: #333; /* 기본 텍스트 색상 */
+  }
+  
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h2 {
+    margin-bottom: 10px;
+    color: #5e3c18; /* 짙은 갈색으로 헤더 색상 지정 */
+  }
+  
+  p {
+    margin-bottom: 15px;
+  }
+  
+  .post {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+  
+  .post-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #3d70b2; /* 포스트 제목 색상 */
+    margin-bottom: 10px;
+  }
+  
+  .post-content {
+    line-height: 1.6;
+  }
+  
+  .button {
+    background-color: #5e3c18; /* 짙은 갈색으로 버튼 배경색 지정 */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .button:hover {
+    background-color: #835d28; /* 버튼 호버 시 색상 변경 */
+  }
+  

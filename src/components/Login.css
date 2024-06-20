@@ -1,54 +1,55 @@
 /* Login.css */
 
 .login-form-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 70vh;
-    margin: auto;
-    padding: 20px;
-    /* background-color: #f8f8f8; */
-  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 70vh;
+  margin: auto;
+  padding: 20px;
+  background-color: #F5F5DC;
+  border-radius: 8px;
+}
 
 .login-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* 추가: 입력 필드와 버튼을 중앙에 정렬 */
-    width: 100%;
-    max-width: 400px;
-    background: #fff;
-    margin: 10px;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 추가: 입력 필드와 버튼을 중앙에 정렬 */
+  width: 100%;
+  max-width: 400px;
+  background: #FFF8DC;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
 .login-form input {
-    width: 100%; /* 입력 필드의 너비를 100%로 설정 */
-    margin-bottom: 15px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
+  width: 100%; /* 입력 필드의 너비를 100%로 설정 */
+  margin-bottom: 15px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .login-form button {
-    width: 150px; /* 버튼의 너비를 100%로 설정 */
-    padding: 10px;
-    font-size: 16px;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
+  width: 150px; /* 버튼의 너비를 100%로 설정 */
+  padding: 10px;
+  font-size: 16px;
+  color: white;
+  background-color: #3B5323;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
 .login-form button:hover {
-    background-color: #0056b3;
-  }
-  
+  background-color: #6B8E23;
+}
+
 .login-form .error {
-    color: red;
-    margin-bottom: 15px;
-  }
+  color: red;
+  margin-bottom: 15px;
+}
