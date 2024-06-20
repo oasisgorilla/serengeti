@@ -6,7 +6,8 @@ import {
   Link,
   Navigate,
 } from "react-router-dom";
-import Login from "./components/Login";
+import Login from "./components/Login"; // 로그인
+import Logout from "./components/Logout"; // 로그아웃
 import Home from "./pages/Home"; // 홈
 import WritePost from "./pages/WritePost"; // 게시글 작성
 import Signup from "./pages/Signup"; // 회원가입
@@ -61,16 +62,6 @@ function App() {
       </div>
     </Router>
   );
-}
-
-function Logout({ setUser }) {
-  useEffect(() => {
-    localStorage.removeItem("user");
-    setUser(null);
-    console.log("log out");
-  }, []);
-
-  return <Navigate to="/login" />;
 }
 
 export default App;

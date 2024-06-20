@@ -13,6 +13,7 @@ function Login({ setUser }) {
     e.preventDefault();
     try {
       const response = await api.post("/login", { username, password });
+      localStorage.setItem("user", JSON.stringify(response.data.user)); // 서버에서 인증토큰 받기
       setUser(response.data.user);
       navigate("/");
     } catch (error) {

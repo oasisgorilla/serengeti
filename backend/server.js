@@ -19,6 +19,10 @@ app.use(
     secret: "your-secret-key",
     resave: false,
     saveUninitialized: false,
+    cookie: { // HTTPS를 사용하는 경우 secure: true로 설정 
+      maxAge: 1000 * 60 * 60 * 24, // 세션 만료 시간(ms)
+      secure: false 
+    }
   })
 );
 
@@ -45,6 +49,17 @@ app.post("/api/login", (req, res) => {
       }
     }
   );
+});
+
+// 로그아웃 엔드포인트
+app.post("/api/logout", (req, res) => {
+  req.session.destroy((err) => { // 로그아옷시 세션 파기
+    if (err) {
+      return res.status(500).json({ error: "Failed to logout" });
+    }
+    res.clearCookie("connect.sid"); // 세션 쿠키 제거
+    res.status(200).json({ message: "Logout successful" });
+  });
 });
 
 // 게시물 생성 엔드포인트
